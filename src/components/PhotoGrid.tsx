@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import './PhotoGrid.css';
 
 const PhotoGrid: React.FC = () => {
   const [photos, setPhotos] = useState<string[]>([]);
+  const [fade, setFade] = useState(false);
+
+  const preloadImages = (urls: string[]) => {
+    return Promise.all(
+      urls.map(url => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = () => resolve();
+        });
+      })
+    );
+  };
 
   const fetchPhotos = async () => {
-    const response = await fetch('https://api.unsplash.com/photos/random?count=9&client_id=J92CYRK5T8Tl-2Vp6Th9rXonpT54O5vehf-JjMpABn8');
-    const data = await response.json();
-    setPhotos(data.map((photo: any) => photo.urls.small));
+    const newPhotos = Array.from({ length: 9 }, () => `https://picsum.photos/200/200?random=${Math.random()}`);
+    
+    setFade(true);     
+    await preloadImages(newPhotos); 
+
+    setPhotos(newPhotos); 
+    setFade(false); 
   };
 
   useEffect(() => {
@@ -16,9 +34,9 @@ const PhotoGrid: React.FC = () => {
   }, []);
 
   return (
-    <div className="photo-grid">
+    <div className={`grid grid-cols-3 gap-4 ${fade ? 'fade-out' : 'fade-in'}`}>
       {photos.map((photo, index) => (
-        <img key={index} src={photo} alt={`photo-${index}`} />
+        <img key={index} src={photo} alt={`photo-${index}`} className="w-full h-48 object-cover rounded-lg" />
       ))}
     </div>
   );
