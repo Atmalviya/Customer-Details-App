@@ -1,25 +1,28 @@
-import React from "react";
-import PhotoGrid from "./PhotoGrid";
+import React from 'react';
+import { Customer } from '../types';
+import PhotoGrid from './PhotoGrid';
 
 interface CustomerDetailsProps {
-  customer: {
-    name: string;
-    title: string;
-    address: string;
-  };
+  customer: Customer | null;
 }
 
 const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) => {
+  if (!customer) {
+    return <div className="w-3/4 p-4">Please select a customer to view details.</div>;
+  }
+
   return (
-    <div className="w-2/3 h-full p-8 overflow-y-auto custom-scrollbar">
+    <div className="w-3/4 p-4 custom-scrollbar">
       <div className="flex flex-col items-center justify-center">
-        <h2 className="text-2xl font-bold mb-4">{customer.name}</h2>
-        <p className="text-lg text-gray-700 mb-2">{customer.title}</p>
-        <p className="text-gray-600 mb-6">{customer.address}</p>
+      <h1 className="text-2xl font-bold mb-4">{customer.name}</h1>
+      <h2 className="text-xl mb-4">{customer.title}</h2>
+      <p className="mb-4">{customer.address}</p>
       </div>
       <PhotoGrid />
     </div>
   );
 };
 
-export default CustomerDetails;
+CustomerDetails.displayName = "CustomerDetails";
+
+export default React.memo(CustomerDetails);

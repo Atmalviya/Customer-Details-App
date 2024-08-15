@@ -1,37 +1,34 @@
-import React from 'react';
-
-interface Customer {
-  id: number;
-  name: string;
-  title: string;
-}
+import React, { useCallback } from 'react';
+import { Customer } from '../types';
 
 interface CustomerListProps {
   customers: Customer[];
-  onSelect: (customer: Customer) => void;
+  onSelectCustomer: (customer: Customer) => void;
   selectedCustomerId: number;
 }
 
-const CustomerList: React.FC<CustomerListProps> = ({ customers, onSelect, selectedCustomerId }) => {
+const CustomerList: React.FC<CustomerListProps> = ({ customers, onSelectCustomer, selectedCustomerId }) => {
+  const handleSelect = useCallback((customer: Customer) => {
+    onSelectCustomer(customer);
+  }, [onSelectCustomer]);
+
   return (
-    <div className="w-1/3 h-full bg-gray-100 p-4 overflow-y-auto custom-scrollbar">
-      {customers.map((customer) => (
+    <div className="h-screen overflow-y-auto w-1/4 bg-gray-100 p-4 custom-scrollbar">
+      {customers.map(customer => (
         <div
           key={customer.id}
-          className={`p-4 mb-4 rounded-lg cursor-pointer transition-colors 
-            ${
-              selectedCustomerId === customer.id
-                ? 'bg-gray-300 border border-r-gray-500'
-                : 'bg-white hover:bg-gray-200'
-            }`}
-          onClick={() => onSelect(customer)}
+          onClick={() => handleSelect(customer)}
+          className={`p-4 mb-2 cursor-pointer rounded-lg ${selectedCustomerId === customer.id ? 'bg-gray-300 border border-r-gray-500'
+            : 'bg-white hover:bg-gray-200'} `}
         >
-          <h4 className="font-semibold">{customer.name}</h4>
-          <p className="text-gray-600">{customer.title}</p>
+          <h2 className="text-lg font-bold">{customer.name}</h2>
+          <p className="text-sm text-gray-600">{customer.title}</p>
         </div>
       ))}
     </div>
   );
 };
 
-export default CustomerList;
+CustomerList.displayName = "CustomerList";
+
+export default React.memo(CustomerList);

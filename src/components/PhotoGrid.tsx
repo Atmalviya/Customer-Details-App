@@ -20,7 +20,8 @@ const PhotoGrid: React.FC = () => {
   const fetchPhotos = async () => {
     const newPhotos = Array.from({ length: 9 }, () => `https://picsum.photos/200/200?random=${Math.random()}`);
     
-    setFade(true);     
+    setFade(true); 
+    
     await preloadImages(newPhotos); 
 
     setPhotos(newPhotos); 
@@ -34,12 +35,14 @@ const PhotoGrid: React.FC = () => {
   }, []);
 
   return (
-    <div className={`grid grid-cols-3 gap-4 ${fade ? 'fade-out' : 'fade-in'}`}>
+    <div className={`grid grid-cols-3 gap-4 ${fade ? 'slide-out' : 'slide-in'}`}>
       {photos.map((photo, index) => (
-        <img key={index} src={photo} alt={`photo-${index}`} className="w-full h-48 object-cover rounded-lg" />
+        <img key={index} src={photo} alt={`photo-${index}`} className="w-full h-48 object-cover rounded-lg transition-transform duration-700" />
       ))}
     </div>
   );
 };
 
-export default PhotoGrid;
+PhotoGrid.displayName = "PhotoGrid"; 
+
+export default React.memo(PhotoGrid);
