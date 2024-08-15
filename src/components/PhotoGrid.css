@@ -1,29 +1,29 @@
-.slide-out {
-  animation: slideOut 0.7s forwards;
-}
-
-.slide-in {
-  animation: slideIn 0.7s forwards;
-}
-
-@keyframes slideOut {
+@keyframes zoomOut {
   from {
+    transform: scale(1);
     opacity: 1;
-    transform: translateX(0);
   }
   to {
+    transform: scale(0.8);
     opacity: 0;
-    transform: translateX(-50%);
   }
 }
 
-@keyframes slideIn {
+@keyframes zoomIn {
   from {
+    transform: scale(1.2);
     opacity: 0;
-    transform: translateX(50%);
   }
   to {
+    transform: scale(1);
     opacity: 1;
-    transform: translateX(0);
   }
+}
+
+.zoom-out {
+  animation: zoomOut 0.5s forwards;
+}
+
+.zoom-in {
+  animation: zoomIn 0.5s forwards;
 }
